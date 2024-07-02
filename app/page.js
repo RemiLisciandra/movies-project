@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 import { SearchInput } from "./components/input/SearchInput";
 import { Message } from "./components/message/Message";
-import useQueryState from "./hooks/useQueryState";
+import { useQueryState } from "nuqs";
 
 export default function Home() {
-  const [searchValue, setSearchValue] = useQueryState("search");
+  const [name, setName] = useQueryState("search");
   const [url, setUrl] = useState("");
 
   useEffect(() => {
     const baseUrl = `${window.location.origin}${window.location.pathname}`;
-    const searchParam = searchValue ? `?search=${searchValue}` : "";
+    const searchParam = name ? `?search=${name}` : "";
     setUrl(`${baseUrl}${searchParam}`);
-  }, [searchValue]);
+  }, [name]);
 
   return (
     <div className="min-h-full">
@@ -22,8 +22,8 @@ export default function Home() {
         <SearchInput
           name="search"
           title="Search"
-          value={searchValue || ""}
-          onChange={(e) => setSearchValue(e.target.value)}
+          value={name || ""}
+          onChange={(e) => setName(e.target.value)}
         />
         <Message text={`URL : ${url}`} />
       </div>
