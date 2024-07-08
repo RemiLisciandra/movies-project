@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useApiKey = () => {
+const useApiKeyRequired = () => {
   const [apiKey, setApiKey] = useState(null);
 
   useEffect(() => {
@@ -26,4 +26,4 @@ const useApiKey = () => {
   return apiKey;
 };
 
-export default useApiKey;
+export default useApiKeyRequired;
