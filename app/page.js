@@ -12,8 +12,7 @@ import Spinner from "./components/loading/Spinner";
 
 export default function Home() {
   const [searchValue, setSearchValue] = useQueryState("search");
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const debounceValue = useDebounceValue(searchValue, 500);
   const apiKey = useApiKeyRequired();
 
@@ -22,34 +21,26 @@ export default function Home() {
   useEffect(() => {
     const updateState = () => {
       if (!apiKey) {
-        setError("Error: Failed to fetch API key");
-        setMessage("");
+        setStatusMessage("Error: Failed to fetch API key");
         return;
       }
 
       if (!debounceValue || debounceValue.length < 3) {
-        setError("Error: Please enter at least 3 characters");
-        setMessage("");
+        setStatusMessage("Error: Please enter at least 3 characters");
         return;
       }
 
       if (isError) {
-        setMessage("Error: Failed to fetch movies");
+        setStatusMessage("Error: Failed to fetch movies");
         return;
       }
 
-      if (!movies || !movies.Search) {
-        setMessage(`No results found for "${debounceValue}"`);
+      if (!movies || !movies.Search || movies.Search.length === 0) {
+        setStatusMessage(`No results found for "${debounceValue}"`);
         return;
       }
 
-      if (movies.Search.length === 0) {
-        setMessage(`No results found for "${debounceValue}"`);
-        return;
-      }
-
-      setError("");
-      setMessage("");
+      setStatusMessage("");
     };
 
     updateState();
@@ -65,31 +56,28 @@ export default function Home() {
           value={searchValue || ""}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        {error && <Message text={error} />}
-        {message && <Message text={message} />}
-        {debounceValue?.length > 3 && isLoading ? (
+        {statusMessage && <Message text={statusMessage} />}
+        {debounceValue?.length >= 3 && isLoading ? (
           <Spinner />
         ) : (
-          <>
-            <div className="grid w-full grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-              {movies?.Search?.map((movie, index) => (
-                <div key={movie.imdbID}>
-                  <Image
-                    src={movie.Poster !== "N/A" ? movie.Poster : "/default.png"}
-                    alt="poster"
-                    width={200}
-                    height={300}
-                    priority={index === 0}
-                    className="w-full h-auto"
-                  />
-                  <p className="text-white">{movie.Title}</p>
-                  <div className="text-gray-300">
-                    <span>{`${movie.Year} | ${movie.Type}`}</span>
-                  </div>
+          <div className="grid w-full grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {movies?.Search?.map((movie, index) => (
+              <div key={movie.imdbID}>
+                <Image
+                  src={movie.Poster !== "N/A" ? movie.Poster : "/default.png"}
+                  alt="poster"
+                  width={200}
+                  height={300}
+                  priority={index === 0}
+                  className="w-full h-auto"
+                />
+                <p className="text-white">{movie.Title}</p>
+                <div className="text-gray-300">
+                  <span>{`${movie.Year} | ${movie.Type}`}</span>
                 </div>
-              ))}
-            </div>
-          </>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

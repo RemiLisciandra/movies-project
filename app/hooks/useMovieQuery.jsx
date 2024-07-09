@@ -25,7 +25,7 @@ const useMovieQuery = (search = null, apiKey) => {
   }
 
   return {
-    movies: data || { Search: [] },
+    movies: data,
     isLoading: !error && !data,
     isError: error,
   };
