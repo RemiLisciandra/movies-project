@@ -5,17 +5,17 @@ const useApiKeyRequired = () => {
 
   useEffect(() => {
     const getApiKey = () => {
-      const storedApiKey = localStorage.getItem("omdbApiKey");
+      let storedApiKey = localStorage.getItem("omdbApiKey");
 
-      if (!storedApiKey) {
+      while (!storedApiKey) {
         const userApiKey = prompt("Please enter your API key to fetch movies");
         if (userApiKey) {
           localStorage.setItem("omdbApiKey", userApiKey);
-          setApiKey(userApiKey);
+          storedApiKey = userApiKey;
         }
-      } else {
-        setApiKey(storedApiKey);
       }
+
+      setApiKey(storedApiKey);
     };
 
     if (typeof window !== "undefined") {
