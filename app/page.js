@@ -49,7 +49,7 @@ export default function Home() {
   return (
     <div className="min-h-full">
       <div className="flex flex-col min-h-full py-8 gap-4 items-start m-auto max-w-3xl px-4">
-        <h1 className="text-3xl font-bold text-center w-full">MoveFinder</h1>
+        <h1 className="text-3xl font-bold text-center w-full">MoviesFinder</h1>
         <SearchInput
           name="search"
           title="Search"
